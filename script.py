@@ -51,9 +51,8 @@ def rev_split(datafile, dataset):
                     
     return dataset
 
-
-print(rev_split)
-
+print('REV SPLIT FUNCTION')
+print(rev_split('data/train-pos.txt', dataset_pos))
 #Here we split the massive chaotic entropic messy review file into individual reviews
 
 def char_filter(dataset):
@@ -62,7 +61,8 @@ def char_filter(dataset):
         index = dataset.index(i)
         dataset[index] = keras.preprocessing.text.text_to_word_sequence(dataset[index], filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n', lower=False, split=' ')
     return dataset
-
+print("CHAR_FILTER FUNCTION")
+print(char_filter(dataset_pos))
 #Here we filter all the unnecessary characters
     
 def data_shuffle(data_pos, data_neg, data_shuffled, labels_shuffled, length):
