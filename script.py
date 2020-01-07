@@ -1,4 +1,3 @@
--*- coding: utf-8 -*-
 """
 Editor de Spyder
 
@@ -52,6 +51,9 @@ def rev_split(datafile, dataset):
                     
     return dataset
 
+
+print(rev_split)
+
 #Here we split the massive chaotic entropic messy review file into individual reviews
 
 def char_filter(dataset):
@@ -93,46 +95,47 @@ def data_split(xtrain, ytrain, xtest, ytest, data, labels, length):
     return xtrain, ytrain, xtest, ytest
 
 #%%
-max_length = 100
-#%%
-print("Uploading data...")
+def main_func():
+    max_length = 100
+    #%%
+    print("Uploading data...")
 
-rev_split(datafile_pos, dataset_pos)
-rev_split(datafile_neg, dataset_neg)
+    rev_split(datafile_pos, dataset_pos)
+    rev_split(datafile_neg, dataset_neg)
 
-#%%
-print("Preprocessing...")
+    #%%
+    print("Preprocessing...")
 
-char_filter(dataset_pos)
-char_filter(dataset_neg)
+    char_filter(dataset_pos)
+    char_filter(dataset_neg)
 
-#%%
-print("Shuffling...")
+    #%%
+    print("Shuffling...")
 
-data_shuffle(dataset_pos, dataset_neg, data, labels, max_length)
+    data_shuffle(dataset_pos, dataset_neg, data, labels, max_length)
 
-#%%
-print("Splitting...")
+    #%%
+    print("Splitting...")
 
-data_split(x_train, y_train, x_test, y_test, data, labels, max_length)
-print("---------- TRAIN DATA ----------\n\n")
+    data_split(x_train, y_train, x_test, y_test, data, labels, max_length)
+    print("---------- TRAIN DATA ----------\n\n")
 
-i = 0
+    i = 0
 
-while i < len(x_train):
-    print(str(i)+"\t"+str(x_train[i])+"\t"+str(y_train[i]))
-    i += 1
-    
-i = 0
+    while i < len(x_train):
+        print(str(i)+"\t"+str(x_train[i])+"\t"+str(y_train[i]))
+        i += 1
+        
+    i = 0
 
-print("---------- TEST DATA ----------\n\n")
+    print("---------- TEST DATA ----------\n\n")
 
-i = 0
+    i = 0
 
-while i < len(x_test):
-    print(str(i)+"\t"+str(x_test[i])+"\t"+str(y_test[i]))
-    i += 1
-    
+    while i < len(x_test):
+        print(str(i)+"\t"+str(x_test[i])+"\t"+str(y_test[i]))
+        i += 1
+        
 
 
 
