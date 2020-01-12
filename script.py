@@ -5,10 +5,11 @@ Created on Thu Jan  9 06:56:46 2020
 @author: ASUS
 """
 
-from IPython import get_ipython
-def __reset__(): get_ipython().magic('reset -sf')
+# Only use for IDE
+# from IPython import get_ipython
+# def __reset__(): get_ipython().magic('reset -sf')
 
-__reset__()
+# __reset__()
 
 #-----------------------------------------------------------------------------#
 
