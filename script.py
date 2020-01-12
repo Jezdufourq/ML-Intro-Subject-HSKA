@@ -5,10 +5,10 @@ Created on Thu Jan  9 06:56:46 2020
 @author: ASUS
 """
 
-# from IPython import get_ipython
-# def __reset__(): get_ipython().magic('reset -sf')
+from IPython import get_ipython
+def __reset__(): get_ipython().magic('reset -sf')
 
-# __reset__()
+__reset__()
 
 #-----------------------------------------------------------------------------#
 
@@ -16,14 +16,15 @@ import numpy as np
 import keras.preprocessing
 from keras.preprocessing import sequence
 from keras.models import Sequential
-from keras.layers import Dense, Embedding, Flatten
-from keras.layers import LSTM, MaxPooling1D, Conv1D
+from keras.layers import Dense, Embedding, Dropout
+from keras.layers import LSTM
 
 #-----------------------------------------------------------------------------#
 
 datafile_pos = 'data/train-pos.txt'
 datafile_neg = 'data/train-neg.txt'
 datafile_eval = 'data/evaluation.txt'
+datafile_out = 'predictions.txt'
 
 dataset_pos = []
 dataset_neg = []
@@ -38,6 +39,9 @@ y_train = []
 
 x_test = []
 y_test = []
+
+classes = []
+out = []
 
 vocab_size = 10000
 max_length = 100
@@ -78,7 +82,7 @@ def data_shuffle(dataset_pos, dataset_neg, data_shuffled, labels_shuffled):
 def data_split(xtrain, ytrain, xtest, ytest, data, labels):
     
     length = len(data)
-    train_length = int(len(data) * 1)
+    train_length = int(len(data) * 0.8)
     i = 0
     
     while i < length:
@@ -131,7 +135,7 @@ x_train = sequence.pad_sequences(x_train, maxlen=max_length, padding = 'post')
 x_test = sequence.pad_sequences(x_test, maxlen=max_length, padding = 'post')
 dataset_eval = sequence.pad_sequences(dataset_eval, maxlen=max_length, padding = 'post')
 print('x_train shape:', x_train.shape)
-print('x_test shape:', x_test.shape)
+#print('x_test shape:', x_test.shape)
 
 #ML Model
 print('\nBuilding model...')
@@ -139,6 +143,7 @@ print('\nBuilding model...')
 model = Sequential()
 model.add(Embedding(vocab_size, 128, input_length = max_length))
 model.add(LSTM(128, dropout=0.2, recurrent_dropout=0.2))
+#model.add(Dropout(0.5))
 model.add(Dense(1, activation='sigmoid'))
     
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -154,16 +159,23 @@ print('Training...')
 model.fit(x_train, y_train,
           batch_size = batch_size,
           epochs = 5,
-          shuffle = True)
-          #validation_data = (x_test, y_test))
-#loss, acc = model.evaluate(x_test, y_test,
-#                            batch_size=batch_size)
-#print('Test accuracy:', acc)
+          shuffle = True,
+          validation_data = (x_test, y_test))
+loss, acc = model.evaluate(x_test, y_test,
+                            batch_size=batch_size)
+print('Test accuracy:', acc)
 
 classes = model.predict(dataset_eval, batch_size = batch_size)
-print(classes)
+
+for i in classes:
+    if float(i) >= 0.5:
+        out.append(1)
+    elif float(i) < 0.5:
+        out.append(0)
 #%%
-print(len(classes))
-print(len(dataset_eval))
-for i in range(len(dataset_eval)):
-    print(str(dataset_eval_text[i])+"\t"+str(classes[i])+"\n")
+with open('datafile_out.txt', 'w') as f:
+    for line in out:
+        f.write(str(line))
+        f.write("\n")
+    
+        
